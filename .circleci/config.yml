@@ -32,7 +32,8 @@ jobs:
       - attach_workspace:
           at: /tmp/commands
       - run: |
-          apt-get install -y wget
+          sudo apt-get update
+          sudo apt-get install -y wget
 
 workflows:
   version: 2
