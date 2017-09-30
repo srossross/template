@@ -17,13 +17,14 @@ jobs:
       - run: go build main.go
       - run: |
           mkdir -p /tmp/commands
-          mv ./main /tmp/commands/template-linux64
+          tar -zcvf /tmp/commands/template-linux64.tgz ./main
+
       - store_artifacts:
           path: /tmp/commands
       - persist_to_workspace:
           root: /tmp/commands
           paths:
-            - template-linux64
+            - template-linux64.tgz
   deploy:
     docker:
       # specify the version
@@ -38,13 +39,16 @@ jobs:
           wget https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz
           sudo tar -xvf hub-linux-amd64-2.2.9.tgz /usr/local/
 
-          mkdir -p ~/.config/hub/
-          echo "github.com:"
-          echo "- user: srossross"
-          echo "  oauth_token: $GITHUB_TOKEN"
-          echo "  protocol: https"
+          mkdir -p ~/.config/
 
-          hub release create -a ./template-linux.tgz v0.0.0-alpha.2
+          echo "github.com:" > ~/.config/hub
+          echo "- user: srossross" >> ~/.config/hub
+          echo "  oauth_token: $GITHUB_TOKEN" >> ~/.config/hub
+          echo "  protocol: https" >> ~/.config/hub
+
+          hub release create \
+            -a /tmp/commands/template-linux64.tgz \
+            v0.0.0-alpha.2
 
 workflows:
   version: 2
