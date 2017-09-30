@@ -35,6 +35,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget
 
+          wget https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz
+          sudo tar -xvf hub-linux-amd64-2.2.9.tgz /usr/local/
+
+          mkdir -p ~/.config/hub/
+          echo "github.com:"
+          echo "- user: srossross"
+          echo "  oauth_token: $GITHUB_TOKEN"
+          echo "  protocol: https"
+
+          hub release create -a ./template-linux.tgz v0.0.0-alpha.2
+
 workflows:
   version: 2
   build_and_deploy:
