@@ -16,8 +16,8 @@ jobs:
       - run: go test -v ./...
       - run: go build main.go
       - run: |
-        mkdir -p /commands
-        mv ./main /commands/template-linux64
+          mkdir -p /commands
+          mv ./main /commands/template-linux64
       - store_artifacts:
           path: /commands
       - persist_to_workspace:
@@ -32,7 +32,7 @@ jobs:
       - attach_workspace:
           at: /commands
       - run: |
-        apt-get install -y wget
+          apt-get install -y wget
 
 workflows:
   version: 2
