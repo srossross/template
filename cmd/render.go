@@ -20,11 +20,12 @@ import (
 	"bytes"
 	"strings"
 	"io/ioutil"
-	"template/lib"
 	"text/template"
 	"github.com/spf13/cobra"
 	"github.com/Masterminds/sprig"
 	"github.com/ghodss/yaml"
+
+	"github.com/srossross/template/lib"
 )
 
 var varValues []string

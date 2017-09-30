@@ -5,8 +5,8 @@ import (
     "os"
     "strings"
     "io/ioutil"
-    "template/strvals"
     "github.com/ghodss/yaml"
+    "github.com/srossross/template/strvals"
 )
 
 // Merges source and destination map, preferring values from the source map

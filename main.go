@@ -14,7 +14,7 @@
 
 package main
 
-import "template/cmd"
+import "github.com/srossross/template/cmd"
 
 func main() {
 	cmd.Execute()
