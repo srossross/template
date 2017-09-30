@@ -4,14 +4,9 @@ import (
     "fmt"
     "os"
     "strings"
-    "text/template"
     "io/ioutil"
     "template/strvals"
     "github.com/ghodss/yaml"
-    // "github.com/imdario/mergo"
-
-
-    // "github.com/Masterminds/sprig"
 )
 
 // Merges source and destination map, preferring values from the source map
@@ -83,19 +78,4 @@ func BuildValues(valueFiles []string, values []string) ([]byte, error) {
 	}
   fmt.Println("base", base)
 	return yaml.Marshal(base)
-}
-
-func Do() {
-  yamlFile, err := ioutil.ReadFile("conf.yaml")
-  if err != nil { panic(err) }
-
-  var c map[string]interface{}
-  err = yaml.Unmarshal(yamlFile, &c)
-  if err != nil { panic(err) }
-
-  tmpl, err := template.New("name").Parse(`Hello "{{ .V }}"\n`)
-  if err != nil { panic(err) }
-
-  err = tmpl.Execute(os.Stdout, c)
-  if err != nil { panic(err) }
 }

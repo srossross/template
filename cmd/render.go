@@ -17,42 +17,59 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"bytes"
 	"strings"
 	"io/ioutil"
 	"template/lib"
 	"text/template"
 	"github.com/spf13/cobra"
-	// "github.com/imdario/mergo"
-	// "github.com/ghodss/yaml"
+	"github.com/Masterminds/sprig"
+	"github.com/ghodss/yaml"
 )
 
 var varValues []string
 var varValueFiles []string
 
-func render(filePath string, values []byte) ([]byte, error) {
+func render(filePath string, ctx Context) (string, error) {
 
-	var bytes []byte
+	var input []byte
 	var err error
 	if strings.TrimSpace(filePath) == "-" {
-		bytes, err = ioutil.ReadAll(os.Stdin)
+		input, err = ioutil.ReadAll(os.Stdin)
 	} else {
-		bytes, err = ioutil.ReadFile(filePath)
+		input, err = ioutil.ReadFile(filePath)
 	}
 	if err != nil {
-		return []byte{}, err
+		return "", err
 	}
 
-	tmpl, err := template.New(filePath).Parse(string(bytes))
+	tmpl, err := template.New(filePath).Funcs(sprig.TxtFuncMap()).Parse(string(input))
 
 	if err != nil {
-		return []byte{}, err
+		return "", err
 	}
 
-	err = tmpl.Execute(os.Stdout, c)
+	var tpl bytes.Buffer
+	err = tmpl.Execute(&tpl, ctx)
 
-	return []byte{}, err
+	return tpl.String(), err
 
 }
+
+type Context struct {
+    Values map[string]interface{}
+    Env map[string]string
+}
+
+func UnmarshalEnv() map[string]string {
+	env := make(map[string]string)
+	for _, i := range os.Environ() {
+		sep := strings.Index(i, "=")
+		env[i[0:sep]] = i[sep+1:]
+	}
+	return env
+}
+
 // renderCmd represents the render command
 var renderCmd = &cobra.Command{
 	Use:   "render",
@@ -64,19 +81,29 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("render called")
 
-		Values, err := lib.BuildValues(varValueFiles, varValues)
+		if len(args) < 1 {
+			fmt.Println("render requires an input template argument");
+			os.Exit(1)
+		}
+
+		ValuesYAML, err := lib.BuildValues(varValueFiles, varValues)
 
 		if err != nil {
 			fmt.Println(err);
 			os.Exit(1)
 		}
-		fmt.Println("args", args);
-		fmt.Println("{{Values", string(Values));
+
+		fmt.Println(":Values:\n", string(ValuesYAML));
 
 		filePath := args[0]
-		output, err := render(filePath, Values)
+
+		ctx := Context{  }
+		yaml.Unmarshal(ValuesYAML, &ctx.Values)
+		ctx.Env = UnmarshalEnv()
+
+		output, err := render(filePath, ctx)
+
 		if err != nil {
 			fmt.Println(err);
 			os.Exit(1)
