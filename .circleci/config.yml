@@ -24,3 +24,21 @@ jobs:
           root: /commands
           paths:
             - template-linux64
+  deploy:
+    docker:
+      # specify the version
+      - image: circleci/golang:1.8
+    steps:
+      - attach_workspace:
+          at: /commands
+      - run: |
+        apt-get install -y wget
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
