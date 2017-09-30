@@ -16,12 +16,12 @@ jobs:
       - run: go test -v ./...
       - run: go build main.go
       - run: |
-          mkdir -p /commands
-          mv ./main /commands/template-linux64
+          mkdir -p /tmp/commands
+          mv ./main /tmp/commands/template-linux64
       - store_artifacts:
-          path: /commands
+          path: /tmp/commands
       - persist_to_workspace:
-          root: /commands
+          root: /tmp/commands
           paths:
             - template-linux64
   deploy:
@@ -30,7 +30,7 @@ jobs:
       - image: circleci/golang:1.8
     steps:
       - attach_workspace:
-          at: /commands
+          at: /tmp/commands
       - run: |
           apt-get install -y wget
 
