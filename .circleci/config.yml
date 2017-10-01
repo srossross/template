@@ -14,17 +14,19 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: go get -v -t -d ./...
       - run: go test -v ./...
-      - run: go build -o ./template-linux64 ./main.go
+      - run:
+          name: Build Linux Executable
+          command: GOOS=linux GOARCH=amd64 go build -o ./template-${GOOS}-${GOARCH} ./main.go
       - run: |
           mkdir -p /tmp/commands
-          tar -zcvf /tmp/commands/template-linux64.tgz ./template-linux64
+          tar -zcvf /tmp/commands/template-linux-amd64.tgz ./template-linux-amd64
 
       - store_artifacts:
           path: /tmp/commands
       - persist_to_workspace:
           root: /tmp/commands
           paths:
-            - template-linux64.tgz
+            - template-linux-amd64.tgz
   deploy:
     docker:
       # specify the version
@@ -35,7 +37,7 @@ jobs:
       - attach_workspace:
           at: /tmp/commands
       - run:
-          name: Create Github Release
+          name: Install Hub
           command: |
             sudo apt-get update
             sudo apt-get install -y wget
@@ -50,8 +52,11 @@ jobs:
             echo "  oauth_token: $GITHUB_TOKEN" >> ~/.config/hub
             echo "  protocol: https" >> ~/.config/hub
 
+          name: Create Github Release
+          command: |
+
             hub release create \
-              -a /tmp/commands/template-linux64.tgz \
+              -a /tmp/commands/template-linux-amd64.tgz \
               -m "Message" \
               v0.0.0-alpha.3
 
