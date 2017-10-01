@@ -37,7 +37,7 @@ jobs:
           sudo apt-get install -y wget
 
           wget https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz
-          sudo tar -xvf hub-linux-amd64-2.2.9.tgz /usr/local/
+          sudo tar -xvf hub-linux-amd64-2.2.9.tgz -C /usr/local/
 
           mkdir -p ~/.config/
 
