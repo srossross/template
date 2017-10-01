@@ -14,12 +14,16 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: go get -v -t -d ./...
       - run: go test -v ./...
+      - run: |
+        mkdir -p /tmp/commands
+
       - run:
           name: Build Linux Executable
-          command: GOOS=linux GOARCH=amd64 go build -o ./template-${GOOS}-${GOARCH} ./main.go
-      - run: |
-          mkdir -p /tmp/commands
-          tar -zcvf /tmp/commands/template-linux-amd64.tgz ./template-linux-amd64
+          command: |
+            GOOS=linux GOARCH=amd64
+            echo ${GOOS}-${GOARCH}
+            go build -o ./template-${GOOS}-${GOARCH} ./main.go
+            tar -zcvf /tmp/commands/template-${GOOS}-${GOARCH}.tgz ./template-${GOOS}-${GOARCH}
 
       - store_artifacts:
           path: /tmp/commands
