@@ -47,14 +47,14 @@ jobs:
             ls -al /tmp/commands/
             echo Uploading to Release ${CIRCLE_TAG:-$(git describe --always)}
 
-            github-release release \
+            echo github-release release \
               --user {{ORG_NAME}} \
               --repo {{REPO_NAME}} \
               --tag "${CIRCLE_TAG:-$(git describe --always)}" \
               --name "Release ${CIRCLE_TAG:-$(git describe --always)}" \
               --description "TODO: Description"
 
-            github-release upload \
+            echo github-release upload \
               --user {{ORG_NAME}} \
               --repo {{REPO_NAME}} \
               --tag "${CIRCLE_TAG:-$(git describe --always)}" \
