@@ -14,9 +14,7 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: go get -v -t -d ./...
       - run: go test -v ./...
-      - run: |
-        mkdir -p /tmp/commands
-
+      - run: mkdir -p /tmp/commands
       - run:
           name: Build Linux Executable
           command: |
