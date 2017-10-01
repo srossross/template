@@ -56,7 +56,7 @@ jobs:
             echo "- user: srossross" >> ~/.config/hub
             echo "  oauth_token: $GITHUB_TOKEN" >> ~/.config/hub
             echo "  protocol: https" >> ~/.config/hub
-
+        - run:
           name: Create Github Release
           command: |
 
