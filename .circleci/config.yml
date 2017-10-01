@@ -59,7 +59,7 @@ jobs:
       - run:
           name: Create Github Release
           command: |
-
+            ls -al /tmp/commands/
             hub release create \
               -a /tmp/commands/template-linux-amd64.tgz \
               -m "Message" \
