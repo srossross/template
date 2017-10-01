@@ -34,23 +34,27 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/commands
-      - run: |
-          sudo apt-get update
-          sudo apt-get install -y wget
+      - run:
+          name: Create Github Release
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y wget
 
-          wget https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz
-          sudo tar -xvf hub-linux-amd64-2.2.9.tgz -C /usr/local/ --strip-components 1
+            wget https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz
+            sudo tar -xvf hub-linux-amd64-2.2.9.tgz -C /usr/local/ --strip-components 1
 
-          mkdir -p ~/.config/
+            mkdir -p ~/.config/
 
-          echo "github.com:" > ~/.config/hub
-          echo "- user: srossross" >> ~/.config/hub
-          echo "  oauth_token: $GITHUB_TOKEN" >> ~/.config/hub
-          echo "  protocol: https" >> ~/.config/hub
+            echo "github.com:" > ~/.config/hub
+            echo "- user: srossross" >> ~/.config/hub
+            echo "  oauth_token: $GITHUB_TOKEN" >> ~/.config/hub
+            echo "  protocol: https" >> ~/.config/hub
 
-          hub release create \
-            -a /tmp/commands/template-linux64.tgz \
-            v0.0.0-alpha.2
+            hub release create \
+              -a /tmp/commands/template-linux64.tgz \
+              -m "Message" \
+              v0.0.0-alpha.3
+
 
 workflows:
   version: 2
