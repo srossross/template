@@ -60,6 +60,7 @@ jobs:
           name: Create Github Release
           command: |
             ls -al /tmp/commands/
+            echo Uploading to Release ${CIRCLE_TAG:-$(git describe --always)}
             hub release create \
               -a /tmp/commands/template-linux-amd64.tgz \
               -m "Message" \
@@ -80,5 +81,5 @@ workflows:
           filters:
             tags:
               only: /v.*/
-            # branches:
-            #   ignore: /.*/
+            branches:
+              ignore: /.*/
