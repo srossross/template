@@ -48,7 +48,6 @@ func BuildValues(valueFiles []string, values []string) ([]byte, error) {
 
 	// User specified a values files via -f/--values
 	for _, filePath := range valueFiles {
-    fmt.Println("filePath", filePath)
 		currentMap := map[string]interface{}{}
 
 		var bytes []byte
@@ -76,6 +75,5 @@ func BuildValues(valueFiles []string, values []string) ([]byte, error) {
 			return []byte{}, fmt.Errorf("failed parsing --set data: %s", err)
 		}
 	}
-  fmt.Println("base", base)
 	return yaml.Marshal(base)
 }

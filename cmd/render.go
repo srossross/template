@@ -17,6 +17,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	// "io"
 	"bytes"
 	"strings"
 	"io/ioutil"
@@ -74,7 +75,7 @@ func UnmarshalEnv() map[string]string {
 // renderCmd represents the render command
 var renderCmd = &cobra.Command{
 	Use:   "render",
-	Short: "A brief description of your command",
+	Short: "Render a template or set of templates",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -84,34 +85,51 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		if len(args) < 1 {
-			fmt.Println("render requires an input template argument");
+			fmt.Fprintln(os.Stderr, "render requires an input template argument");
 			os.Exit(1)
 		}
 
 		ValuesYAML, err := lib.BuildValues(varValueFiles, varValues)
 
 		if err != nil {
-			fmt.Println(err);
+			fmt.Fprintln(os.Stderr, err);
 			os.Exit(1)
 		}
 
-		fmt.Println(":Values:\n", string(ValuesYAML));
+		fmt.Fprintln(os.Stderr, ":Values:\n", string(ValuesYAML));
 
-		filePath := args[0]
+		outputPath := "-"
+		for _, fileSpec := range args {
+			fileSpecList := strings.Split(fileSpec, ":")
+			inputPath := fileSpecList[0]
+			if len(fileSpecList) > 1 {
+				outputPath = fileSpecList[1]
+			}
 
-		ctx := Context{  }
-		yaml.Unmarshal(ValuesYAML, &ctx.Values)
-		ctx.Env = UnmarshalEnv()
+			ctx := Context{  }
+			yaml.Unmarshal(ValuesYAML, &ctx.Values)
+			ctx.Env = UnmarshalEnv()
 
-		output, err := render(filePath, ctx)
+			output, err := render(inputPath, ctx)
 
-		if err != nil {
-			fmt.Println(err);
-			os.Exit(1)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err);
+				os.Exit(1)
+			}
+
+			if strings.TrimSpace(outputPath) == "-" {
+				_, err = os.Stdout.Write([]byte(output))
+			} else {
+				err = ioutil.WriteFile(outputPath, []byte(output), 0644)
+			}
+
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err);
+				os.Exit(1)
+			}
+
+
 		}
-
-		fmt.Println(output)
-
 
 	},
 }
@@ -129,5 +147,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// renderCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	renderCmd.Flags().BoolP("verbose", "v", false, "Print verbose output to stderr")
 }

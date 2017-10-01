@@ -14,10 +14,10 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: go get -v -t -d ./...
       - run: go test -v ./...
-      - run: go build main.go
+      - run: go build -o ./template-linux64 ./main.go
       - run: |
           mkdir -p /tmp/commands
-          tar -zcvf /tmp/commands/template-linux64.tgz ./main
+          tar -zcvf /tmp/commands/template-linux64.tgz ./template-linux64
 
       - store_artifacts:
           path: /tmp/commands
