@@ -42,7 +42,8 @@ func mergeValues(dest map[string]interface{}, src map[string]interface{}) map[st
 }
 
 
-
+// BuildValues builds a single Values map from the user inputed
+// values files (--values) and indivitual values (--set)
 func BuildValues(valueFiles []string, values []string) ([]byte, error) {
 	base := map[string]interface{}{}
 

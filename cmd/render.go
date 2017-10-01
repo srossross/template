@@ -17,7 +17,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	// "io"
 	"bytes"
 	"strings"
 	"io/ioutil"
@@ -32,7 +31,7 @@ import (
 var varValues []string
 var varValueFiles []string
 
-func render(filePath string, ctx Context) (string, error) {
+func render(filePath string, ctx lib.Context) (string, error) {
 
 	var input []byte
 	var err error
@@ -56,20 +55,6 @@ func render(filePath string, ctx Context) (string, error) {
 
 	return tpl.String(), err
 
-}
-
-type Context struct {
-    Values map[string]interface{}
-    Env map[string]string
-}
-
-func UnmarshalEnv() map[string]string {
-	env := make(map[string]string)
-	for _, i := range os.Environ() {
-		sep := strings.Index(i, "=")
-		env[i[0:sep]] = i[sep+1:]
-	}
-	return env
 }
 
 // renderCmd represents the render command
@@ -106,9 +91,9 @@ to quickly create a Cobra application.`,
 				outputPath = fileSpecList[1]
 			}
 
-			ctx := Context{  }
+			ctx := lib.Context{  }
 			yaml.Unmarshal(ValuesYAML, &ctx.Values)
-			ctx.Env = UnmarshalEnv()
+			ctx.Env = lib.UnmarshalEnv()
 
 			output, err := render(inputPath, ctx)
 
