@@ -46,17 +46,18 @@ jobs:
             go get github.com/aktau/github-release
             ls -al /tmp/commands/
             echo Uploading to Release ${CIRCLE_TAG:-$(git describe --always)}
+            echo Uploading to ${CIRCLE_PROJECT_USERNAME} ${CIRCLE_PROJECT_REPONAME}
 
-            echo github-release release \
-              --user {{ORG_NAME}} \
-              --repo {{REPO_NAME}} \
+            github-release release \
+              --user ${CIRCLE_PROJECT_USERNAME} \
+              --repo ${CIRCLE_PROJECT_REPONAME} \
               --tag "${CIRCLE_TAG:-$(git describe --always)}" \
               --name "Release ${CIRCLE_TAG:-$(git describe --always)}" \
               --description "TODO: Description"
 
-            echo github-release upload \
-              --user {{ORG_NAME}} \
-              --repo {{REPO_NAME}} \
+            github-release upload \
+              --user ${CIRCLE_PROJECT_USERNAME} \
+              --repo ${CIRCLE_PROJECT_REPONAME} \
               --tag "${CIRCLE_TAG:-$(git describe --always)}" \
               --name "template-linux-amd64.tgz" \
               --file /tmp/commands/template-linux-amd64.tgz
