@@ -63,7 +63,7 @@ jobs:
             hub release create \
               -a /tmp/commands/template-linux-amd64.tgz \
               -m "Message" \
-              v0.0.0-alpha.3
+              ${CIRCLE_TAG:-$(git describe --always)}
 
 
 workflows:
