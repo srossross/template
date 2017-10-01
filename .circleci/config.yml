@@ -36,35 +36,31 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.8
-    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
-      - checkout
       - attach_workspace:
           at: /tmp/commands
-      - run:
-          name: Install Hub
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y wget
 
-            wget https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz
-            sudo tar -xvf hub-linux-amd64-2.2.9.tgz -C /usr/local/ --strip-components 1
-
-            mkdir -p ~/.config/
-
-            echo "github.com:" > ~/.config/hub
-            echo "- user: srossross" >> ~/.config/hub
-            echo "  oauth_token: $GITHUB_TOKEN" >> ~/.config/hub
-            echo "  protocol: https" >> ~/.config/hub
       - run:
           name: Create Github Release
           command: |
+            go get github.com/aktau/github-release
             ls -al /tmp/commands/
             echo Uploading to Release ${CIRCLE_TAG:-$(git describe --always)}
-            hub release create \
-              -a /tmp/commands/template-linux-amd64.tgz \
-              -m "Message" \
-              ${CIRCLE_TAG:-$(git describe --always)}
+
+            github-release release \
+              --user {{ORG_NAME}} \
+              --repo {{REPO_NAME}} \
+              --tag "${CIRCLE_TAG:-$(git describe --always)}" \
+              --name "Release ${CIRCLE_TAG:-$(git describe --always)}" \
+              --description "TODO: Description"
+
+            github-release upload \
+              --user {{ORG_NAME}} \
+              --repo {{REPO_NAME}} \
+              --tag "${CIRCLE_TAG:-$(git describe --always)}" \
+              --name "template-linux-amd64.tgz" \
+              --file /tmp/commands/template-linux-amd64.tgz
+
 
 
 workflows:
