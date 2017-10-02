@@ -1,4 +1,4 @@
-set -euo pipefail
+set -eu
 
 VERSTION=${TEMPLATE_VERSION:-v0.0.3-3}
 PREFIX=${TEMPLATE_INSTALL_PREFIX:-"/usr/local/bin"}

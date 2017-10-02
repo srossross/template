@@ -1,5 +1,6 @@
 GOOS := $(shell go env GOHOSTOS)
 GOARCH := $(shell go env GOHOSTARCH)
+CGO_ENABLED := 0
 
 LDFLAGS := -X github.com/srossross/template/cmd.VERSION=$(shell echo $${CIRCLE_TAG:-?}) \
 -X github.com/srossross/template/cmd.BUILD_TIME=$(shell date -u +%Y-%m-%d)
@@ -9,11 +10,10 @@ REPONAME := $(shell echo ${CIRCLE_PROJECT_REPONAME})
 TAG := $(shell echo ${CIRCLE_TAG:-$(shell git describe --always)} )
 
 
-
 build: ## build for any arch
 	mkdir -p /tmp/commands
 
-	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "$(LDFLAGS)" -o ./template-$(GOOS)-$(GOARCH) ./main.go
+	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "$(LDFLAGS)" -o ./template-$(GOOS)-$(GOARCH) ./main.go
 	tar -zcvf /tmp/commands/template-$(GOOS)-$(GOARCH).tgz ./template-$(GOOS)-$(GOARCH)
 
 
