@@ -1,4 +1,4 @@
-// Copyright © 2017 NAME HERE <EMAIL ADDRESS>
+// Copyright © 2017 SEAN ROSS-ROSS srossross@gmail.com
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import (
 
 var varValues []string
 var varValueFiles []string
+var verbose bool
+var outputArg string
 
 func render(filePath string, ctx lib.Context) (string, error) {
 
@@ -61,12 +63,21 @@ func render(filePath string, ctx lib.Context) (string, error) {
 var renderCmd = &cobra.Command{
 	Use:   "render",
 	Short: "Render a template or set of templates",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Long: `Render a template or set of templates
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Exanple:
+
+  template render ./template.tpl
+
+Environment variables can be accessed inside of a template with {{ .Env.VALUE }}
+
+Values files: given on the command line with '-f' or '--values'.
+
+Are plain YAML files. They can be used inside of a template as {{ .Values.VALUE }}
+
+Each new values file specified gets merged into the '.Values' object
+
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		if len(args) < 1 {
@@ -80,20 +91,21 @@ to quickly create a Cobra application.`,
 			fmt.Fprintln(os.Stderr, err);
 			os.Exit(1)
 		}
+		if verbose {
+			fmt.Fprintln(os.Stderr, ":Values:\n", string(ValuesYAML))
+		}
 
-		fmt.Fprintln(os.Stderr, ":Values:\n", string(ValuesYAML));
+		ctx := lib.Context{  }
+		yaml.Unmarshal(ValuesYAML, &ctx.Values)
+		ctx.Env = lib.UnmarshalEnv()
 
-		outputPath := "-"
 		for _, fileSpec := range args {
 			fileSpecList := strings.Split(fileSpec, ":")
 			inputPath := fileSpecList[0]
+			outputPath := outputArg
 			if len(fileSpecList) > 1 {
 				outputPath = fileSpecList[1]
 			}
-
-			ctx := lib.Context{  }
-			yaml.Unmarshal(ValuesYAML, &ctx.Values)
-			ctx.Env = lib.UnmarshalEnv()
 
 			output, err := render(inputPath, ctx)
 
@@ -112,10 +124,7 @@ to quickly create a Cobra application.`,
 				fmt.Fprintln(os.Stderr, err);
 				os.Exit(1)
 			}
-
-
 		}
-
 	},
 }
 
@@ -125,12 +134,6 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	renderCmd.Flags().StringArrayVarP(&varValueFiles, "values", "f", []string{}, "specify values in a YAML file (can specify multiple)")
 	renderCmd.Flags().StringArrayVar(&varValues, "set", []string{}, "set values on the command line (can specify multiple or separate values with commas: key1=val1,key2=val2)")
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// renderCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	renderCmd.Flags().BoolP("verbose", "v", false, "Print verbose output to stderr")
+	renderCmd.Flags().StringVarP(&outputArg, "output", "o", "-", "Print template output to a file")
+	renderCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Print verbose output to stderr")
 }
