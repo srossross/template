@@ -14,36 +14,36 @@ build: ## build for any arch
 
 all: build-darwin-amd64 build-linux-amd64
 
-	release: ## Create github release
-		github-release release \
-			--user $(USERNAME) \
-			--repo $(REPONAME) \
-			--tag $(TAG) \
-			--name "Release $(TAG)" \
-			--description "TODO: Description"
+release: ## Create github release
+	github-release release \
+		--user $(USERNAME) \
+		--repo $(REPONAME) \
+		--tag $(TAG) \
+		--name "Release $(TAG)" \
+		--description "TODO: Description"
 
-	upload: ## Upload build artifacts to github
+upload: ## Upload build artifacts to github
 
-		github-release release \
-			--user $(USERNAME) \
-			--repo $(REPONAME) \
-			--tag $(TAG) \
-			--name "template-linux-amd64.tgz" \
-			--file /tmp/commands/template-linux-amd64.tgz
+	github-release release \
+		--user $(USERNAME) \
+		--repo $(REPONAME) \
+		--tag $(TAG) \
+		--name "template-linux-amd64.tgz" \
+		--file /tmp/commands/template-linux-amd64.tgz
 
-		github-release release \
-			--user $(USERNAME) \
-			--repo $(REPONAME) \
-			--tag $(TAG) \
-			--name "template-linux-386.tgz" \
-			--file /tmp/commands/template-linux-386.tgz
+	github-release release \
+		--user $(USERNAME) \
+		--repo $(REPONAME) \
+		--tag $(TAG) \
+		--name "template-linux-386.tgz" \
+		--file /tmp/commands/template-linux-386.tgz
 
-		github-release release \
-			--user $(USERNAME) \
-			--repo $(REPONAME) \
-			--tag $(TAG) \
-			--name "template-darwin-amd64.tgz" \
-			--file /tmp/commands/template-darwin-amd64.tgz
+	github-release release \
+		--user $(USERNAME) \
+		--repo $(REPONAME) \
+		--tag $(TAG) \
+		--name "template-darwin-amd64.tgz" \
+		--file /tmp/commands/template-darwin-amd64.tgz
 
 .PHONY: help
 
