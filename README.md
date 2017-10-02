@@ -1,16 +1,26 @@
-
 # Installing
 
 ## Easy install
-```
-curl  https://srossross.github.io/template/get.sh | bash
-```
-
-Optionally you can set the version os and arch
 
 ```
-export TEMPLATE_VERSION=v1.0.0 TEMPLATE_ARCH=arm64 TEMPLATE_OS=linux
-curl srossross.github.io/template/get | bash
+curl  https://srossross.github.io/template/get.sh | sh
+```
+
+This will install a single executable file `template` into `/usr/local/bin`
+
+Optionally you can set the version os and arch and install prefix
+
+```
+export TEMPLATE_VERSION=v1.0.0 TEMPLATE_ARCH=arm64 TEMPLATE_OS=linux TEMPLATE_INSTALL_PREFIX=/usr/local/bin
+curl srossross.github.io/template/get.sh | bash
+```
+
+## Inside a Docker container
+
+```
+FROM ...
+
+RUN curl srossross.github.io/template/get.sh | sh
 ```
 
 # Getting Started
@@ -71,4 +81,8 @@ TODO
 
 # Flow Control
 
+TODO
+
 # Named Templates
+
+TODO

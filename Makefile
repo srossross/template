@@ -1,12 +1,13 @@
 
-LDFLAGS = -X github.com/srossross/template/cmd.VERSION=99 -X github.com/srossross/template/cmd.BUILD_TIME=$(shell date -u +%Y-%m-%d)
+LDFLAGS = -X github.com/srossross/template/cmd.VERSION=$(shell echo $${CIRCLE_TAG:-?}) \
+	-X github.com/srossross/template/cmd.BUILD_TIME=$(shell date -u +%Y-%m-%d)
 
-echoflags:
-	echo $(LDFLAGS)
+
 build: ## build for any arch
 	mkdir -p /tmp/commands
-	go build -ldflags "$(LDFLAGS)" -o ./template-${GOOS}-${GOARCH} ./main.go
-	tar -zcvf /tmp/commands/template-${GOOS}-${GOARCH}.tgz ./template-${GOOS}-${GOARCH}
+	$(eval FILE_PART := $(shell go env GOOS)-$(shell go env GOARCH))
+	go build -ldflags "$(LDFLAGS)" -o ./template-$(FILE_PART) ./main.go
+	tar -zcvf /tmp/commands/template-$(FILE_PART).tgz ./template-$(FILE_PART)
 
 
 build-linux-amd64: export GOOS = linux
@@ -22,7 +23,6 @@ build-darwin-amd64: export GOARCH = amd64
 build-darwin-amd64: build ## build for darwin
 
 all: build-darwin-amd64 build-linux-amd64
-
 
 .PHONY: help
 
