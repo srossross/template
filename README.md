@@ -1,14 +1,15 @@
 
 # Installing
 
+## Easy install
 ```
-curl srossross.github.io/template/get | bash
+curl  https://srossross.github.io/template/get.sh | bash
 ```
 
-```
-ENV TEMPLATE_VERSION v0.0.3-3
-wget https://github.com/srossross/template/releases/download/${TEMPLATE_VERSION}/template-linux-amd64.tgz && tar -xf template-linux-amd64.tgz && chmod +x ./template-linux-amd64 && mv template-linux-amd64 /usr/bin/template
-```
+## Github Releases
+
+Go to https://github.com/srossross/template/releases and get the latest release for your system
+
 
 # Examples
 
@@ -30,6 +31,6 @@ The docker image we should use is "{{ .Values.Image }}"
 
 ```sh
 # Command line
-$ template render -f values.yaml template.tpl 
+$ template render -f values.yaml template.tpl
 The docker image we should use is "library/postgres"
 ```

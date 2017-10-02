@@ -20,11 +20,10 @@ jobs:
       # - run: $GOPATH/bin/golint ./...
       - run:
           name: Build Linux Executable
-          command: |
-            GOOS=linux GOARCH=amd64
-            echo ${GOOS}-${GOARCH}
-            go build -o ./template-${GOOS}-${GOARCH} ./main.go
-            tar -zcvf /tmp/commands/template-${GOOS}-${GOARCH}.tgz ./template-${GOOS}-${GOARCH}
+          command: make build-linux-amd64
+      - run:
+          name: Build Darwin Executable
+          command: make build-darwin-amd64
 
       - store_artifacts:
           path: /tmp/commands
@@ -32,6 +31,7 @@ jobs:
           root: /tmp/commands
           paths:
             - template-linux-amd64.tgz
+            - template-darwin-amd64.tgz
   deploy:
     docker:
       # specify the version
