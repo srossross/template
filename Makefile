@@ -1,28 +1,49 @@
+GOOS := $(shell go env GOHOSTOS)
+GOARCH := $(shell go env GOHOSTARCH)
 
-LDFLAGS = -X github.com/srossross/template/cmd.VERSION=$(shell echo $${CIRCLE_TAG:-?}) \
+LDFLAGS := -X github.com/srossross/template/cmd.VERSION=$(shell echo $${CIRCLE_TAG:-?}) \
 	-X github.com/srossross/template/cmd.BUILD_TIME=$(shell date -u +%Y-%m-%d)
 
 
 build: ## build for any arch
 	mkdir -p /tmp/commands
-	$(eval FILE_PART := $(shell go env GOOS)-$(shell go env GOARCH))
-	go build -ldflags "$(LDFLAGS)" -o ./template-$(FILE_PART) ./main.go
-	tar -zcvf /tmp/commands/template-$(FILE_PART).tgz ./template-$(FILE_PART)
 
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "$(LDFLAGS)" -o ./template-$(GOOS)-$(GOARCH) ./main.go
+	tar -zcvf /tmp/commands/template-$(GOOS)-$(GOARCH).tgz ./template-$(GOOS)-$(GOARCH)
 
-build-linux-amd64: export GOOS = linux
-build-linux-amd64: export GOARCH = amd64
-build-linux-amd64: build ## build for linux 64bit
-
-build-linux-386: export GOOS = linux
-build-linux-386: export GOARCH = 386
-build-linux-386: build ## build for linux 32bit
-
-build-darwin-amd64: export GOOS = darwin
-build-darwin-amd64: export GOARCH = amd64
-build-darwin-amd64: build ## build for darwin
 
 all: build-darwin-amd64 build-linux-amd64
+
+	release: ## Create github release
+		github-release release \
+			--user $(USERNAME) \
+			--repo $(REPONAME) \
+			--tag $(TAG) \
+			--name "Release $(TAG)" \
+			--description "TODO: Description"
+
+	upload: ## Upload build artifacts to github
+
+		github-release release \
+			--user $(USERNAME) \
+			--repo $(REPONAME) \
+			--tag $(TAG) \
+			--name "template-linux-amd64.tgz" \
+			--file /tmp/commands/template-linux-amd64.tgz
+
+		github-release release \
+			--user $(USERNAME) \
+			--repo $(REPONAME) \
+			--tag $(TAG) \
+			--name "template-linux-386.tgz" \
+			--file /tmp/commands/template-linux-386.tgz
+
+		github-release release \
+			--user $(USERNAME) \
+			--repo $(REPONAME) \
+			--tag $(TAG) \
+			--name "template-darwin-amd64.tgz" \
+			--file /tmp/commands/template-darwin-amd64.tgz
 
 .PHONY: help
 

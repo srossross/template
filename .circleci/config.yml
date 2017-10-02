@@ -19,11 +19,11 @@ jobs:
       - run: mkdir -p /tmp/commands
       # - run: $GOPATH/bin/golint ./...
       - run:
-          name: Build Linux Executable
-          command: make build-linux-amd64
-      - run:
-          name: Build Darwin Executable
-          command: make build-darwin-amd64
+          name: Build Executables
+          command: |
+            make build GOOS=linux GOARCH=amd64
+            make build GOOS=linux GOARCH=386
+            make build GOOS=darwin GOARCH=amd64
 
       - store_artifacts:
           path: /tmp/commands
@@ -31,6 +31,7 @@ jobs:
           root: /tmp/commands
           paths:
             - template-linux-amd64.tgz
+            - template-linux-386.tgz
             - template-darwin-amd64.tgz
   deploy:
     docker:
@@ -48,20 +49,15 @@ jobs:
             echo Uploading to Release ${CIRCLE_TAG:-$(git describe --always)}
             echo Uploading to ${CIRCLE_PROJECT_USERNAME} ${CIRCLE_PROJECT_REPONAME}
 
-            github-release release \
-              --user ${CIRCLE_PROJECT_USERNAME} \
-              --repo ${CIRCLE_PROJECT_REPONAME} \
-              --tag "${CIRCLE_TAG:-$(git describe --always)}" \
-              --name "Release ${CIRCLE_TAG:-$(git describe --always)}" \
-              --description "TODO: Description"
+            make release \
+              USERNAME=${CIRCLE_PROJECT_USERNAME} \
+              REPONAME=${CIRCLE_PROJECT_REPONAME} \
+              TAG=${CIRCLE_TAG:-$(git describe --always)}
 
-            github-release upload \
-              --user ${CIRCLE_PROJECT_USERNAME} \
-              --repo ${CIRCLE_PROJECT_REPONAME} \
-              --tag "${CIRCLE_TAG:-$(git describe --always)}" \
-              --name "template-linux-amd64.tgz" \
-              --file /tmp/commands/template-linux-amd64.tgz
-
+            make upload \
+              USERNAME=${CIRCLE_PROJECT_USERNAME} \
+              REPONAME=${CIRCLE_PROJECT_REPONAME} \
+              TAG=${CIRCLE_TAG:-$(git describe --always)}
 
 
 workflows:
