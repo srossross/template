@@ -49,15 +49,8 @@ jobs:
             echo Uploading to Release ${CIRCLE_TAG:-$(git describe --always)}
             echo Uploading to ${CIRCLE_PROJECT_USERNAME} ${CIRCLE_PROJECT_REPONAME}
 
-            make release \
-              USERNAME=${CIRCLE_PROJECT_USERNAME} \
-              REPONAME=${CIRCLE_PROJECT_REPONAME} \
-              TAG=${CIRCLE_TAG:-$(git describe --always)}
-
-            make upload \
-              USERNAME=${CIRCLE_PROJECT_USERNAME} \
-              REPONAME=${CIRCLE_PROJECT_REPONAME} \
-              TAG=${CIRCLE_TAG:-$(git describe --always)}
+            make release TAG=${CIRCLE_TAG:-$(git describe --always)}
+            make upload TAG=${CIRCLE_TAG:-$(git describe --always)}
 
 
 workflows:

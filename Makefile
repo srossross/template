@@ -2,7 +2,12 @@ GOOS := $(shell go env GOHOSTOS)
 GOARCH := $(shell go env GOHOSTARCH)
 
 LDFLAGS := -X github.com/srossross/template/cmd.VERSION=$(shell echo $${CIRCLE_TAG:-?}) \
-	-X github.com/srossross/template/cmd.BUILD_TIME=$(shell date -u +%Y-%m-%d)
+-X github.com/srossross/template/cmd.BUILD_TIME=$(shell date -u +%Y-%m-%d)
+
+USERNAME := $(shell echo ${CIRCLE_PROJECT_USERNAME})
+REPONAME := $(shell echo ${CIRCLE_PROJECT_REPONAME})
+TAG := $(shell echo ${CIRCLE_TAG:-$(shell git describe --always)} )
+
 
 
 build: ## build for any arch
