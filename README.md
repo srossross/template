@@ -6,31 +6,26 @@
 curl  https://srossross.github.io/template/get.sh | bash
 ```
 
-## Github Releases
+Optionally you can set the version os and arch
 
-Go to https://github.com/srossross/template/releases and get the latest release for your system
-
-
-# Examples
-
-## Very simple example
-
-### values.yaml
-```yaml
-# File: values.yaml
-Image: library/postgres
+```
+export TEMPLATE_VERSION=v1.0.0 TEMPLATE_ARCH=arm64 TEMPLATE_OS=linux
+curl srossross.github.io/template/get | bash
 ```
 
-### template.tpl
-```yaml
-# File: template.tpl
-The docker image we should use is "{{ .Values.Image }}"
+# Getting Started
+
+Check out the [examples](examples) directory for a list of examples:
+
+```
+template render -f values.yaml template.tpl
 ```
 
-### shell
+# Values Files
 
-```sh
-# Command line
-$ template render -f values.yaml template.tpl
-The docker image we should use is "library/postgres"
-```
+* A values file if passed into template with the `-f` flag (`template render -f myvals.yaml ./mytemplate.tpl`)
+* Individual parameters passed with `--set` (such as `template render --set foo=bar ./mytemplate.tpl`)
+
+Each `-f` can be overridden by more user-supplied values files, which can in turn be overridden by `--set` parameters.
+
+Values files are plain YAML files. Let’s edit values.yaml and then edit our ConfigMap template.
