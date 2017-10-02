@@ -29,21 +29,21 @@ release: ## Create github release
 
 upload: ## Upload build artifacts to github
 
-	github-release release \
+	github-release upload \
 		--user $(USERNAME) \
 		--repo $(REPONAME) \
 		--tag $(TAG) \
 		--name "template-linux-amd64.tgz" \
 		--file /tmp/commands/template-linux-amd64.tgz
 
-	github-release release \
+	github-release upload \
 		--user $(USERNAME) \
 		--repo $(REPONAME) \
 		--tag $(TAG) \
 		--name "template-linux-386.tgz" \
 		--file /tmp/commands/template-linux-386.tgz
 
-	github-release release \
+	github-release upload \
 		--user $(USERNAME) \
 		--repo $(REPONAME) \
 		--tag $(TAG) \
