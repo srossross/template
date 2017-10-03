@@ -5,18 +5,18 @@
 
 ### values.yaml
 
-{% capture simpleValues %}
+{% capture fileContent %}
   {% include simple/values.yaml %}
 {% endcapture %}
 
 {% highlight yaml %}
-{{ simpleValues }}
+{{ fileContent }}
 {% endhighlight %}
 
 ### template.tpl
 
-{% capture simpleValues %}
-  {% include simple/values.yaml %}
+{% capture fileContent %}
+  {% include simple/template.tpl %}
 {% endcapture %}
 
 {% highlight yaml %}
@@ -25,8 +25,16 @@
 
 ### shell
 
-```sh
-# Command line
-$ template render -f values.yaml template.tpl
+{% capture fileContent %}
+  {% include simple/simple.sh %}
+{% endcapture %}
+
+{% highlight shell %}
+{{ fileContent }}
+{% endhighlight %}
+
+### Output:
+
+```
 The docker image we should use is "library/postgres"
 ```
