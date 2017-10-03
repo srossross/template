@@ -1,6 +1,9 @@
+{% raw %}
+
 # Installing
 
 ## Easy install
+
 
 This command will work on osx, linux-32bit and linux-64bit
 
@@ -39,7 +42,7 @@ This leans heavily from the templates commands of Kubernetes Helm https://docs.h
 
 ## My first template
 
-{% raw %}
+
 ```yaml
 # mytemplate.tpl
 apiVersion: v1
@@ -71,7 +74,7 @@ data:
 
 ```
 
-{% endraw %}
+
 
 # Values Files
 
@@ -97,3 +100,5 @@ TODO
 # Named Templates
 
 TODO
+
+{% endraw %}
