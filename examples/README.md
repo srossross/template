@@ -4,10 +4,14 @@
 ## Very simple example
 
 ### values.yaml
-```yaml
-# File: values.yaml
-Image: library/postgres
-```
+
+{% capture simpleValues %}
+  {% include simple/values.yaml %}
+{% endcapture %}
+
+{% highlight yaml %}
+{{ fileContent }}
+{% endhighlight %}
 
 ### template.tpl
 ```yaml
