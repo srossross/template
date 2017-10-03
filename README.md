@@ -2,16 +2,22 @@
 
 ## Easy install
 
+This command will work on osx, linux-32bit and linux-64bit
+
 ```
 curl  https://srossross.github.io/template/get.sh | sh
 ```
 
-This will install a single executable file `template` into `/usr/local/bin`
+It will install a single executable file `template` into `/usr/local/bin`
 
 Optionally you can set the version os and arch and install prefix
 
-```
-export TEMPLATE_VERSION=v1.0.0 TEMPLATE_ARCH=arm64 TEMPLATE_OS=linux TEMPLATE_INSTALL_PREFIX=/usr/local/bin
+```sh
+export  TEMPLATE_VERSION=v1.0.0 \
+        TEMPLATE_ARCH=arm64 \
+        TEMPLATE_OS=linux \
+        TEMPLATE_INSTALL_PREFIX=/usr/local/bin
+
 curl srossross.github.io/template/get.sh | bash
 ```
 
@@ -19,7 +25,7 @@ curl srossross.github.io/template/get.sh | bash
 
 ```
 FROM ...
-
+ENV TEMPLATE_VERSION v1.0.0
 RUN curl srossross.github.io/template/get.sh | sh
 ```
 
@@ -34,7 +40,7 @@ This leans heavily from the templates commands of Kubernetes Helm https://docs.h
 ## My first template
 
 ```yaml
-# template.tpl
+# mytemplate.tpl
 apiVersion: v1
 kind: ConfigMap
 metadata:

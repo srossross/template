@@ -17,12 +17,9 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"bytes"
 	"strings"
 	"io/ioutil"
-	"text/template"
 	"github.com/spf13/cobra"
-	"github.com/Masterminds/sprig"
 	"github.com/ghodss/yaml"
 
 	"github.com/srossross/template/lib"
@@ -32,32 +29,6 @@ var varValues []string
 var varValueFiles []string
 var verbose bool
 var outputArg string
-
-func render(filePath string, ctx lib.Context) (string, error) {
-
-	var input []byte
-	var err error
-	if strings.TrimSpace(filePath) == "-" {
-		input, err = ioutil.ReadAll(os.Stdin)
-	} else {
-		input, err = ioutil.ReadFile(filePath)
-	}
-	if err != nil {
-		return "", err
-	}
-
-	tmpl, err := template.New(filePath).Funcs(sprig.TxtFuncMap()).Parse(string(input))
-
-	if err != nil {
-		return "", err
-	}
-
-	var tpl bytes.Buffer
-	err = tmpl.Execute(&tpl, ctx)
-
-	return tpl.String(), err
-
-}
 
 // renderCmd represents the render command
 var renderCmd = &cobra.Command{
@@ -107,7 +78,7 @@ Each new values file specified gets merged into the '.Values' object
 				outputPath = fileSpecList[1]
 			}
 
-			output, err := render(inputPath, ctx)
+			output, err := lib.Render(inputPath, ctx)
 
 			if err != nil {
 				fmt.Fprintln(os.Stderr, err);
