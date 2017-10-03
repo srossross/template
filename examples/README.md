@@ -10,7 +10,7 @@
 {% endcapture %}
 
 {% highlight yaml %}
-{{ fileContent }}
+{{ simpleValues }}
 {% endhighlight %}
 
 ### template.tpl
