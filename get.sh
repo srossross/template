@@ -1,6 +1,7 @@
 set -euo pipefail
 
-VERSTION=${TEMPLATE_VERSION:-v0.0.3-3}
+DEFAULT_VERSION=v0.0.6
+VERSTION=${TEMPLATE_VERSION:-${DEFAULT_VERSION}}
 PREFIX=${TEMPLATE_INSTALL_PREFIX:-"/usr/local/bin"}
 URL_BASE="https://github.com/srossross/template/releases/download"
 
