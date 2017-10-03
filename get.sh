@@ -1,4 +1,4 @@
-set -euo pipefail
+set -eu
 
 DEFAULT_VERSION=v0.0.6
 VERSTION=${TEMPLATE_VERSION:-${DEFAULT_VERSION}}
