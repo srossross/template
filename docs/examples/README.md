@@ -5,32 +5,29 @@
 
 ### values.yaml
 
-{% capture fileContent %}
-  {% include simple/values.yaml %}
-{% endcapture %}
-
 {% highlight yaml %}
-{{ fileContent }}
+{% raw %}
+# File: values.yaml
+Image: library/postgres
+{% endraw %}
 {% endhighlight %}
 
 ### template.tpl
 
-{% capture fileContent %}
-  {% include simple/template.tpl %}
-{% endcapture %}
-
 {% highlight yaml %}
-{{ fileContent }}
+{% raw %}
+# File: template.tpl
+Your username is {{ default "<unknown>" .Env.USER }}
+The docker image we should use is "{{ .Values.Image }}"
+{% endraw %}
 {% endhighlight %}
 
 ### shell
 
-{% capture fileContent %}
-  {% include simple/simple.sh %}
-{% endcapture %}
-
 {% highlight shell %}
-{{ fileContent }}
+{% raw %}
+template render -f values.yaml template.tpl
+{% endraw %}
 {% endhighlight %}
 
 ### Output:

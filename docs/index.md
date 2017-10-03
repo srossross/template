@@ -74,8 +74,6 @@ data:
 
 ```
 
-
-
 # Values Files
 
 * A values file if passed into template with the `-f` flag (`template render -f myvals.yaml ./mytemplate.tpl`)
