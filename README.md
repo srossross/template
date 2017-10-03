@@ -39,6 +39,7 @@ This leans heavily from the templates commands of Kubernetes Helm https://docs.h
 
 ## My first template
 
+{% raw %}
 ```yaml
 # mytemplate.tpl
 apiVersion: v1
@@ -48,6 +49,8 @@ metadata:
 data:
   myvalue: "Hello World"
 ```
+{% endraw %}
+
 
 ```
 $ template render --set Name=SomeConfig - <<EOF
