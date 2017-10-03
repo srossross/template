@@ -49,8 +49,8 @@ metadata:
 data:
   myvalue: "Hello World"
 ```
-{% endraw %}
 
+You can run this example like this:
 
 ```
 $ template render --set Name=SomeConfig - <<EOF
@@ -70,6 +70,8 @@ data:
   myvalue: "Hello World"
 
 ```
+
+{% endraw %}
 
 # Values Files
 
