@@ -71,7 +71,6 @@ func BuildValues(valueFiles []string, values []string) ([]byte, error) {
 
 	// User specified a value via --set
 	for _, value := range values {
-    fmt.Println("value", value)
 		if err := strvals.ParseInto(value, base); err != nil {
 			return []byte{}, fmt.Errorf("failed parsing --set data: %s", err)
 		}
