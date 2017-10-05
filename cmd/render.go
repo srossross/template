@@ -29,6 +29,7 @@ var varValues []string
 var varValueFiles []string
 var verbose bool
 var outputArg string
+var sep string
 
 // renderCmd represents the render command
 var renderCmd = &cobra.Command{
@@ -70,30 +71,27 @@ Each new values file specified gets merged into the '.Values' object
 		yaml.Unmarshal(ValuesYAML, &ctx.Values)
 		ctx.Env = lib.UnmarshalEnv()
 
-		for _, fileSpec := range args {
-			fileSpecList := strings.Split(fileSpec, ":")
-			inputPath := fileSpecList[0]
-			outputPath := outputArg
-			if len(fileSpecList) > 1 {
-				outputPath = fileSpecList[1]
-			}
+		for fileSpec := range lib.InputIterator(args, false) {
 
-			output, err := lib.Render(inputPath, ctx)
+			output, err := lib.Render(fileSpec.In, ctx)
 
 			if err != nil {
 				fmt.Fprintln(os.Stderr, err);
 				os.Exit(1)
 			}
 
-			if strings.TrimSpace(outputPath) == "-" {
+			if strings.TrimSpace(fileSpec.Out) == "-" {
 				_, err = os.Stdout.Write([]byte(output))
 			} else {
-				err = ioutil.WriteFile(outputPath, []byte(output), 0644)
+				err = ioutil.WriteFile(fileSpec.Out, []byte(output), 0644)
 			}
 
 			if err != nil {
 				fmt.Fprintln(os.Stderr, err);
 				os.Exit(1)
+			}
+			if len(sep) > 0 {
+				fmt.Fprintln(os.Stdout, sep);
 			}
 		}
 	},
@@ -107,4 +105,5 @@ func init() {
 	renderCmd.Flags().StringArrayVar(&varValues, "set", []string{}, "set values on the command line (can specify multiple or separate values with commas: key1=val1,key2=val2)")
 	renderCmd.Flags().StringVarP(&outputArg, "output", "o", "-", "Print template output to a file")
 	renderCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Print verbose output to stderr")
+	renderCmd.Flags().StringVar(&sep, "sep", "", "When printing to stdout, seperate files with sep")
 }

@@ -8,7 +8,8 @@
 {% highlight yaml %}
 {% raw %}
 # File: values.yaml
-Image: library/postgres
+Thing: library/postgres
+ThingName: image
 {% endraw %}
 {% endhighlight %}
 
@@ -18,7 +19,7 @@ Image: library/postgres
 {% raw %}
 # File: template.tpl
 Your username is {{ default "<unknown>" .Env.USER }}
-The docker image we should use is "{{ .Values.Image }}"
+The default {{ .Values.ThingName }} we should use is "{{ .Values.Thing }}"
 {% endraw %}
 {% endhighlight %}
 
@@ -32,6 +33,28 @@ template render -f values.yaml template.tpl
 
 ### Output:
 
-```
-The docker image we should use is "library/postgres"
-```
+{% highlight shell %}
+{% raw %}
+Your username is alice
+The default image we should use is "library/postgres"
+{% endraw %}
+{% endhighlight %}
+
+## Overriding values with `--set`
+
+### shell
+
+{% highlight shell %}
+{% raw %}
+template render -f values.yaml --set Thing=library/mongodb template.tpl
+{% endraw %}
+{% endhighlight %}
+
+### Output:
+
+{% highlight shell %}
+{% raw %}
+Your username is alice
+The default image we should use is "library/mongodb"
+{% endraw %}
+{% endhighlight %}
