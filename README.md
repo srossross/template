@@ -1,14 +1,28 @@
-{% raw %}
+# Template
+
+Why did I create this?:
+
+ * I am extremely happy with [Helm](https://docs.helm.sh) templating mechanizm. But helm does not do simple templates.
+ * Can accept values from the environment e.g. `{{ .Env.ENV_VAR }}`
+ * Can accept values from a json or yaml file
+ * Can override values on the command line.
+ * Single easy to install executable. Great for docker containers or ci builds.
+ * Powerful [sprig](https://godoc.org/github.com/Masterminds/sprig) template function library
+
+# Similar Templating tools
+
+* [envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html)
+* [dockerize](https://github.com/jwilder/dockerize)
+* [gomplate](https://github.com/hairyhenderson/gomplate)
 
 # Installing
 
 ## Easy install
 
-
 This command will work on osx, linux-32bit and linux-64bit
 
 ```
-curl  https://srossross.github.io/template/get.sh | sh
+curl https://srossross.github.io/template/get.sh | sh
 ```
 
 It will install a single executable file `template` into `/usr/local/bin`
@@ -100,5 +114,3 @@ TODO
 # Named Templates
 
 TODO
-
-{% endraw %}
