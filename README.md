@@ -47,6 +47,15 @@ ENV TEMPLATE_VERSION v1.0.0
 RUN curl srossross.github.io/template/get.sh | sh
 ```
 
+## OSX Homebrew
+
+The `curl` method above works, but you can also install this via Homebrew on a mac
+
+```
+brew tap srossross/template https://github.com/srossross/template
+brew install template
+```
+
 # Getting Started
 
 Check out the [examples](examples) directory for a list of examples.  
