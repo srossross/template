@@ -2,11 +2,11 @@
 
 Why did I create this?:
 
- * I am extremely happy with [Helm](https://docs.helm.sh) templating mechanizm. But helm does not do simple templates.
+ * I am extremely happy with [Helm](https://docs.helm.sh) templating mechanism. But helm does not do simple templates.
  * Can accept values from the environment e.g. `{{ .Env.ENV_VAR }}`
  * Can accept values from a json or yaml file
  * Can override values on the command line.
- * Single easy to install executable. Great for docker containers or ci builds.
+ * Single easy to install executable. Great for docker containers or CI builds.
  * Powerful [sprig](https://godoc.org/github.com/Masterminds/sprig) template function library
 
 # Similar Templating tools
