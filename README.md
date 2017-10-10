@@ -14,6 +14,7 @@ Why did I create this?:
 * [envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html)
 * [dockerize](https://github.com/jwilder/dockerize)
 * [gomplate](https://github.com/hairyhenderson/gomplate)
+* [kontemplate](https://github.com/tazjin/kontemplate)
 
 # Installing
 
