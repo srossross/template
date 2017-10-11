@@ -15,6 +15,8 @@ Why did I create this?:
 * [dockerize](https://github.com/jwilder/dockerize)
 * [gomplate](https://github.com/hairyhenderson/gomplate)
 * [kontemplate](https://github.com/tazjin/kontemplate)
+* [temple](https://docwhat.github.io/temple/)
+* [txt](https://github.com/jimmyfrasche/txt)
 
 # Installing
 
